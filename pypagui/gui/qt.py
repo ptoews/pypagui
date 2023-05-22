@@ -1,4 +1,3 @@
-import sys
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 
@@ -26,7 +25,9 @@ class ParameterFormWidget(qtw.QWidget):
 
     @qtc.Slot()
     def _on_button_click(self):
-        self._callback({n: edit.text() for n, edit in self._param_edits.items()})
+        r = self._callback({n: edit.text() for n, edit in self._param_edits.items()})
+        if r:
+            self.close()
 
 
 def make_gui(parameters, callback):
@@ -35,7 +36,7 @@ def make_gui(parameters, callback):
     widget = ParameterFormWidget(parameters, callback)
     widget.show()
 
-    sys.exit(app.exec())
+    app.exec()
 
 
 if __name__ == "__main__":

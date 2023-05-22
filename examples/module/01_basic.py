@@ -1,5 +1,3 @@
-import sys
-
 import pypagui
 
 
@@ -20,4 +18,8 @@ class A:
 
 if __name__ == '__main__':
     t = 111
-    pypagui.wrap_module(sys.modules[__name__])
+    pypagui.wrap_module(__name__)
+    i = 0
+    print(f"{M=} ({type(M)})")
+    print(f"{b=} ({type(b)})")
+    print(f"{t=} ({type(t)})")

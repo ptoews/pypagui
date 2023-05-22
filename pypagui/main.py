@@ -1,4 +1,5 @@
 import inspect
+import sys
 
 import pypagui.gui.qt
 import pypagui.parameter
@@ -23,7 +24,33 @@ def wrap_function(func):
     return f
 
 
-def wrap_module(module):
+def is_relevant_member(name, value):
+    return not name.startswith("__") and not (
+        inspect.ismodule(value) or
+        inspect.isclass(value) or
+        inspect.ismethod(value) or
+        inspect.isfunction(value) or
+        inspect.isgeneratorfunction(value) or
+        inspect.isgenerator(value) or
+        inspect.isbuiltin(value) or
+        inspect.isroutine(value)
+    )
+
+
+def extract_module_parameters(module):
     members = inspect.getmembers(module)
-    non_dunder_members = [m for m in members if not m[0].startswith("__")]
-    print(f"{non_dunder_members=}")
+    return {m[0]: pypagui.parameter.Parameter(m[0], type(m[1]), m[1])
+            for m in members if is_relevant_member(*m)}
+
+
+def wrap_module(module_name: str):
+    module = sys.modules[module_name]
+    parameters = extract_module_parameters(module)
+
+    def callback(param_values):
+        for param_name, param_value in param_values.items():
+            setattr(module, param_name, parameters[param_name].value_from_input(param_value))
+        # Return True to signalize the GUI to close so that the module execution can continue
+        return True
+
+    pypagui.gui.qt.make_gui(parameters, callback)
