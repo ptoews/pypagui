@@ -26,7 +26,14 @@ class ParameterFormWidget(qtw.QWidget):
 
     @qtc.Slot()
     def _on_button_click(self):
+        self._run_button.setEnabled(False)
+        # TODO: this is just a workaround so that the button is disabled, to show the user that the
+        #  run is still executing. It doesn't even block clicks properly for some reason.
+        #  a proper implementation should execute the run in a separate thread, and then communicate
+        #  back the finished state.
+        qtw.QApplication.processEvents()
         self._callback({n: edit.text() for n, edit in self._param_edits.items()})
+        self._run_button.setEnabled(True)
         if self._exit_on_run:
             self.close()
 
