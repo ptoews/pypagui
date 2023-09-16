@@ -18,6 +18,7 @@ class A:
 
 if __name__ == '__main__':
     t = 111
+    # Call pypagui after all relevant variables have been initialized and before the action starts
     pypagui.wrap_module(__name__)
     i = 0
     print(f"{M=} ({type(M)})")

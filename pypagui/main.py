@@ -50,7 +50,5 @@ def wrap_module(module_name: str):
     def callback(param_values):
         for param_name, param_value in param_values.items():
             setattr(module, param_name, parameters[param_name].value_from_input(param_value))
-        # Return True to signalize the GUI to close so that the module execution can continue
-        return True
 
-    pypagui.gui.qt.make_gui(parameters, callback)
+    pypagui.gui.qt.make_gui(parameters, callback, exit_on_run=True)

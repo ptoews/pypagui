@@ -3,9 +3,10 @@ from PySide6 import QtWidgets as qtw
 
 
 class ParameterFormWidget(qtw.QWidget):
-    def __init__(self, parameters, callback):
+    def __init__(self, parameters, callback, exit_on_run=False):
         super().__init__()
         self._callback = callback
+        self._exit_on_run = exit_on_run
 
         self._param_edits = {}
         self._layout = qtw.QVBoxLayout()
@@ -25,15 +26,15 @@ class ParameterFormWidget(qtw.QWidget):
 
     @qtc.Slot()
     def _on_button_click(self):
-        r = self._callback({n: edit.text() for n, edit in self._param_edits.items()})
-        if r:
+        self._callback({n: edit.text() for n, edit in self._param_edits.items()})
+        if self._exit_on_run:
             self.close()
 
 
-def make_gui(parameters, callback):
+def make_gui(parameters, callback, exit_on_run=False):
     app = qtw.QApplication([])
 
-    widget = ParameterFormWidget(parameters, callback)
+    widget = ParameterFormWidget(parameters, callback, exit_on_run=exit_on_run)
     widget.show()
 
     app.exec()
