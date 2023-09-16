@@ -38,8 +38,12 @@ a checkpoint.
 
 Check the examples directory for more examples.
 
-## Requirements
+## Installation
 Tested with Python 3.10 (should run at least with >= 3.8)
+
+```commandline
+pip install git+https://github.com/ptoews/pypagui
+```
 
 ## Development
 
