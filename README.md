@@ -50,7 +50,6 @@ pip install git+https://github.com/ptoews/pypagui
 ### TODO
  - Implement threading for run execution (including communication about finishing the run)
  - Support additional data types (incl. casting)
-   - datetime
    - Filepaths
  - Add widget to choose parameter value type
    - Allows handling typing.Union and typing.Optional (i.e. choosing None)

@@ -1,3 +1,5 @@
+import datetime
+import pathlib
 import typing as T
 
 from PySide6 import QtCore as qtc
@@ -46,6 +48,10 @@ class ParameterFormWidget(qtw.QWidget):
             edit = qtw.QLineEdit()
             if parameter.default_value is not None:
                 edit.setText(str(parameter.default_value))
+        elif issubclass(parameter.type_annotation, datetime.datetime):
+            edit = qtw.QDateTimeEdit()
+            if parameter.default_value is not None:
+                edit.setDateTime(parameter.default_value)
         else:
             edit = qtw.QLineEdit(parameter.default_value_to_string())
         return edit
@@ -61,6 +67,8 @@ class ParameterFormWidget(qtw.QWidget):
         elif issubclass(parameter.type_annotation, float):
             # We use QLineEdit for floats, see create_parameter_editing_widget() for explanation
             value = float(edit_widget.text())
+        elif issubclass(parameter.type_annotation, datetime.datetime):
+            value = edit_widget.dateTime().toPython()
         else:
             value = edit_widget.text()
         return value
