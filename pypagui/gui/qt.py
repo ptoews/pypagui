@@ -41,6 +41,7 @@ class ParameterFormWidget(qtw.QWidget):
                 edit.setChecked(parameter.default_value)
         elif issubclass(parameter.type_annotation, int):
             edit = qtw.QSpinBox()
+            edit.setRange(-2**31, 2**31-1)
             if parameter.default_value is not None:
                 edit.setValue(parameter.default_value)
         elif issubclass(parameter.type_annotation, float):
