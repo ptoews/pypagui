@@ -73,18 +73,19 @@ class ParameterFormWidget(qtw.QWidget):
             value = edit_widget.text()
         return value
 
+    def _on_run_finished(self):
+        """
+        Called by the callback method after the run execution has finished. This method runs
+        in the execution thread, not in the main thread.
+        """
+        self._run_button.setEnabled(True)
+
     @qtc.Slot()
     def _on_button_click(self):
         self._run_button.setEnabled(False)
-        # TODO: this is just a workaround so that the button is disabled, to show the user that the
-        #  run is still executing. It doesn't even block clicks properly for some reason.
-        #  a proper implementation should execute the run in a separate thread, and then communicate
-        #  back the finished state.
-        qtw.QApplication.processEvents()
         parameters = {n: self.extract_parameter_value(self._parameters[n], edit)
                       for n, edit in self._param_edits.items()}
-        self._callback(parameters)
-        self._run_button.setEnabled(True)
+        self._callback(parameters, self._on_run_finished)
         if self._exit_on_run:
             self.close()
 

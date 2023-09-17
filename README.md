@@ -48,11 +48,13 @@ pip install git+https://github.com/ptoews/pypagui
 ## Development
 
 ### TODO
- - Implement threading for run execution (including communication about finishing the run)
+ - Handle wrapping of GUI code, e.g. matplotlib show() requiring to be run in main thread
+   - run in separate process (as an option?)
  - Support additional data types (incl. casting)
    - Filepaths
  - Add widget to choose parameter value type
    - Allows handling typing.Union and typing.Optional (i.e. choosing None)
+ - Improve widgets layout
  - Allow configuration of wrap_function() decorator
  - Handle positional-only and var-positional arguments
  - Tests
