@@ -8,7 +8,7 @@ import dataclasses
 class Parameter:
     name: str
     type_annotation: T.Optional[type]
-    default_value: object
+    default_value: T.Any
 
     @classmethod
     def from_inspect_parameter(cls, parameter: inspect.Parameter):

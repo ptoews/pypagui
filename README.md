@@ -49,7 +49,6 @@ pip install git+https://github.com/ptoews/pypagui
 
 ### TODO
  - Implement threading for run execution (including communication about finishing the run)
- - Use specific GUI widgets based on given type (e.g. int and bool)
  - Support additional data types (incl. casting)
    - datetime
    - Filepaths

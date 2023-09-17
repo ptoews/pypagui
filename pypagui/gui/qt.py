@@ -1,10 +1,15 @@
+import typing as T
+
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 
+from pypagui.parameter import Parameter
+
 
 class ParameterFormWidget(qtw.QWidget):
-    def __init__(self, parameters, callback, exit_on_run=False):
+    def __init__(self, parameters: T.Dict[str, Parameter], callback, exit_on_run=False):
         super().__init__()
+        self._parameters = parameters
         self._callback = callback
         self._exit_on_run = exit_on_run
 
@@ -13,7 +18,7 @@ class ParameterFormWidget(qtw.QWidget):
         for parameter in parameters.values():
             param_layout = qtw.QHBoxLayout()
             label = qtw.QLabel(parameter.name)
-            edit = qtw.QLineEdit(parameter.default_value_to_string())
+            edit = self.create_parameter_editing_widget(parameter)
             self._param_edits[parameter.name] = edit
             param_layout.addWidget(label)
             param_layout.addWidget(edit)
@@ -24,6 +29,42 @@ class ParameterFormWidget(qtw.QWidget):
         self._layout.addWidget(self._run_button)
         self.setLayout(self._layout)
 
+    @staticmethod
+    def create_parameter_editing_widget(parameter: Parameter):
+        if parameter.type_annotation is None:
+            edit = qtw.QLineEdit(parameter.default_value_to_string())
+        elif issubclass(parameter.type_annotation, bool):
+            edit = qtw.QCheckBox()
+            if parameter.default_value is not None:
+                edit.setChecked(parameter.default_value)
+        elif issubclass(parameter.type_annotation, int):
+            edit = qtw.QSpinBox()
+            if parameter.default_value is not None:
+                edit.setValue(parameter.default_value)
+        elif issubclass(parameter.type_annotation, float):
+            # QDoubleSpinBox uses a fixed precision that we cannot infer, so use a text widget
+            edit = qtw.QLineEdit()
+            if parameter.default_value is not None:
+                edit.setText(str(parameter.default_value))
+        else:
+            edit = qtw.QLineEdit(parameter.default_value_to_string())
+        return edit
+
+    @staticmethod
+    def extract_parameter_value(parameter, edit_widget):
+        if parameter.type_annotation is None:
+            value = edit_widget.text()
+        elif issubclass(parameter.type_annotation, bool):
+            value = edit_widget.isChecked()
+        elif issubclass(parameter.type_annotation, int):
+            value = edit_widget.value()
+        elif issubclass(parameter.type_annotation, float):
+            # We use QLineEdit for floats, see create_parameter_editing_widget() for explanation
+            value = float(edit_widget.text())
+        else:
+            value = edit_widget.text()
+        return value
+
     @qtc.Slot()
     def _on_button_click(self):
         self._run_button.setEnabled(False)
@@ -32,7 +73,9 @@ class ParameterFormWidget(qtw.QWidget):
         #  a proper implementation should execute the run in a separate thread, and then communicate
         #  back the finished state.
         qtw.QApplication.processEvents()
-        self._callback({n: edit.text() for n, edit in self._param_edits.items()})
+        parameters = {n: self.extract_parameter_value(self._parameters[n], edit)
+                      for n, edit in self._param_edits.items()}
+        self._callback(parameters)
         self._run_button.setEnabled(True)
         if self._exit_on_run:
             self.close()
