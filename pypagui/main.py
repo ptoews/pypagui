@@ -12,9 +12,7 @@ def wrap_function(func):
                   for parameter_name, parameter in signature.parameters.items()}
 
     def callback(param_values):
-        casted_param_values = {param_name: parameters[param_name].value_from_input(param_value)
-                               for param_name, param_value in param_values.items()}
-        func(**casted_param_values)
+        func(param_values)
 
     def f(*args, **kwargs):
         bound_arguments = signature.bind_partial(*args, **kwargs)
