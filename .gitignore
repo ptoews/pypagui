@@ -1,4 +1,4 @@
 .idea/
-venv/
+venv*/
 build/
 pypagui.egg-info/
