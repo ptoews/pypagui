@@ -39,7 +39,7 @@ a checkpoint.
 Check the examples directory for more examples.
 
 ## Installation
-Tested with Python 3.10 (should run at least with >= 3.8)
+Tested with Python 3.10 (should run at least with >= 3.7)
 
 ```commandline
 pip install git+https://github.com/ptoews/pypagui

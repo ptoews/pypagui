@@ -5,11 +5,11 @@ import pypagui
 
 @pypagui.wrap_function
 def f(a: int, b: float, c: bool, d: str, e: datetime.datetime):
-    print(f"{a=} ({type(a)})")
-    print(f"{b=} ({type(b)})")
-    print(f"{c=} ({type(c)})")
-    print(f"{d=} ({type(d)})")
-    print(f"{e=} ({type(e)})")
+    print(f"a={a} ({type(a)})")
+    print(f"b={b} ({type(b)})")
+    print(f"b={c} ({type(c)})")
+    print(f"d={d} ({type(d)})")
+    print(f"e={e} ({type(e)})")
 
 
 if __name__ == '__main__':
