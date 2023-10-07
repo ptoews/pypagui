@@ -1,3 +1,7 @@
+"""
+Missing annotations is currently not supported. It is planned to add datatype dropdowns to the GUI,
+which would then allow specifying the type at runtime thus allowing missing annotations.
+"""
 import pypagui
 
 
