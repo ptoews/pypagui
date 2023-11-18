@@ -6,8 +6,8 @@ import pypagui
 
 
 @pypagui.wrap_function
-def main(text, offset):
-    print(text[offset:])
+def main(text, offset, step=1):
+    print(text[offset::step])
 
 
 if __name__ == '__main__':

@@ -12,9 +12,13 @@ class Parameter:
 
     @classmethod
     def from_inspect_parameter(cls, parameter: inspect.Parameter):
+        type_annotation = parameter.annotation if parameter.annotation is not inspect.Parameter.empty else None
+        default_value = parameter.default if parameter.default is not inspect.Parameter.empty else None
+        if type_annotation is None and default_value is not None:
+            type_annotation = type(default_value)
         return cls(name=parameter.name,
-                   type_annotation=parameter.annotation if parameter.annotation is not inspect.Parameter.empty else None,
-                   default_value=parameter.default if parameter.default is not inspect.Parameter.empty else None)
+                   type_annotation=type_annotation,
+                   default_value=default_value)
 
     def value_from_input(self, input_string: str):
         if self.type_annotation is None:
