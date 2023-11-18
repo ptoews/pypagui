@@ -20,23 +20,25 @@ class Parameter:
                    type_annotation=type_annotation,
                    default_value=default_value)
 
-    def value_from_input(self, input_string: str):
+    def value_from_input(self, input_value: object):
+        if not isinstance(input_value, str):
+            return input_value
         if self.type_annotation is None:
-            if input_string == "":
+            if input_value == "":
                 return None
             # Try to guess data type
             try:
-                return int(input_string)
+                return int(input_value)
             except ValueError:
                 pass
             try:
-                return float(input_string)
+                return float(input_value)
             except ValueError:
                 pass
             # Not a number; assume string
-            return input_string
+            return input_value
         else:
-            return self.type_annotation(input_string)
+            return self.type_annotation(input_value)
 
     def default_value_to_string(self):
         if self.default_value is None:

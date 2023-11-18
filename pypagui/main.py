@@ -22,7 +22,10 @@ def wrap_function(func):
             This method runs the actual execution. Additionally, it calls a callback that
             goes back to the GUI to inform it about the execution having finished.
             """
-            func(**param_values)
+            # Cast values that had no type annotation based on entered value
+            casted_param_values = {param_name: parameters[param_name].value_from_input(param_value)
+                                   for param_name, param_value in param_values.items()}
+            func(**casted_param_values)
             on_finish_callback()
 
         # Run the actual execution in a separate thread to not block the GUI
