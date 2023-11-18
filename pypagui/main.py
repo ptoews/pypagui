@@ -32,7 +32,10 @@ def wrap_function(func):
     def f(*args, **kwargs):
         bound_arguments = signature.bind_partial(*args, **kwargs)
         for param_name, arg_value in bound_arguments.arguments.items():
-            parameters[param_name].default_value = arg_value
+            param = parameters[param_name]
+            param.default_value = arg_value
+            if param.type_annotation is None:
+                param.type_annotation = type(arg_value)
         pypagui.gui.qt.make_gui(parameters, callback)
     return f
 
